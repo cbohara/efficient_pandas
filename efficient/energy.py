@@ -70,7 +70,7 @@ def apply_tariff_iterrows(df):
 
 
 @timeit(repeat=3, number=10)
-def apply_tariff_appy(df):
+def apply_tariff_apply(df):
     """
     Use apply() method to add third column with energy cost per hour
     :param df: dateframe to update
@@ -85,9 +85,54 @@ def apply_tariff_appy(df):
     return df
 
 
+@timeit(repeat=3, number=10)
+def apply_tariff_isin(df):
+    """
+    Use isin() to select appropriate rows to apply appropriate tariff in a vectorized operation
+    :param df: dataframe to update
+    :return: updated dataframe
+    """
+    # define hour range boolean arrays
+    peak_hours = df.index.hour.isin(range(17, 24))
+    shoulder_hours = df.index.hour.isin(range(7, 17))
+    off_peak_hours = df.index.hour.isin(range(0, 7))
+
+    # apply tariffs to hour ranges
+    df.loc[peak_hours, 'cost_cents'] = df.loc[peak_hours, 'energy_kwh'] * 28
+    df.loc[shoulder_hours, 'cost_cents'] = df.loc[shoulder_hours, 'energy_kwh'] * 20
+    df.loc[off_peak_hours, 'cost_cents'] = df.loc[off_peak_hours, 'energy_kwh'] * 12
+    return df
+
+
+#@timeit(repeat=3, number=10)
+def apply_tariff_cut(df):
+    """
+    Use cut() to split up rows
+    :param df: dataframe to update
+    :return: updated dataframe
+    """
+    # cut() returns ndarray with appropriate rate for row
+    cents_per_kwh = pd.cut(
+        x=df.index.hour,
+        bins=[0, 7, 17, 24],
+        include_lowest=True,
+        labels=[12, 20, 28]
+    ).astype(int)
+    df['cost_cents'] = cents_per_kwh * df['energy_kwh']
+    return df
+
+
 if __name__ == '__main__':
-    file1 = 'demand_profile.csv'
-    df1 = import_file(file1)
-    apply_tariff_loop(df1)
-    apply_tariff_iterrows(df1)
-    apply_tariff_appy(df1)
+    file = 'demand_profile.csv'
+    df = import_file(file)
+    apply_tariff_loop(df)
+    apply_tariff_iterrows(df)
+    apply_tariff_apply(df)
+
+    df.set_index('date_time', inplace=True)
+    apply_tariff_isin(df)
+    apply_tariff_cut(df)
+
+    data_store = pd.HDFStore('processed_data.h5')
+    data_store['preprocessed_df'] = df
+    data_store.close()
