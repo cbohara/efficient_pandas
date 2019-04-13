@@ -7,4 +7,33 @@ O(1) = looking up rows based on index values is like looking up dict values base
 vs
 O(n) = looking up values in the column are like looking up values in the list
 
+Python for Data Analysis, 2nd Edition
+series
+1D sequence of values with associated index
 
+obj = pd.Series([4, 7, -5, 3])
+0 4
+1 7
+2 -5
+3 3
+
+obj2 = pd.Series([4, 7, -5, 3], index=['d', 'b', 'a', 'c'])
+d 4
+b 7
+a -5
+c 3
+
+dataframe
+like a dict of series
+
+data = {'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada', 'Nevada'],
+        'year': [2000, 2001, 2002, 2001, 2002, 2003],
+        'pop': [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]}
+df = pd.DataFrame(data)
+pop   state  year
+0  1.5    Ohio  2000
+1  1.7    Ohio  2001
+2  3.6    Ohio  2002
+3  2.4  Nevada  2001
+4  2.9  Nevada  2002
+5  3.2  Nevada  2003
