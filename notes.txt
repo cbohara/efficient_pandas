@@ -1,5 +1,7 @@
+--------------------------------------------
 Fast, Flexible, Easy and Intuitive: How to Speed Up Your Pandas Projects
 https://realpython.com/fast-flexible-pandas/
+--------------------------------------------
 
 https://stackoverflow.com/questions/27238066/what-is-the-point-of-indexing-in-pandas
 like a dict, a dataframes index is backed by a hash table
@@ -7,7 +9,18 @@ O(1) = looking up rows based on index values is like looking up dict values base
 vs
 O(n) = looking up values in the column are like looking up values in the list
 
+--------------------------------------------
+Explore Happiness Data Using Python Pivot Tables
+https://www.dataquest.io/blog/pandas-pivot-table/
+--------------------------------------------
+
+index = column to group by
+values = column to aggregate (defaults to mean aggregation)
+columns = alternative display option when grouping by multiple values
+
+--------------------------------------------
 Python for Data Analysis, 2nd Edition
+--------------------------------------------
 series
 1D sequence of values with associated index
 
